@@ -1,7 +1,7 @@
 import requests
 from flask import Flask, render_template, request
 
-from main import get_problems_by_difficulty, get_random_problem, parse_html
+from helper import get_problems_by_difficulty, get_random_problem, parse_html
 
 app = Flask(__name__)
 
