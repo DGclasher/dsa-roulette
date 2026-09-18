@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DSA Random Problem</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-slate-100 px-4 py-10 text-slate-900">
+    <main class="mx-auto max-w-xl rounded-2xl bg-white p-6 shadow-sm sm:p-8">
+        <p class="text-sm font-semibold uppercase tracking-widest text-indigo-600">SDE Sheet</p>
+        <h1 class="mt-2 text-3xl font-bold tracking-tight">Find your next problem</h1>
+        <p class="mt-2 text-slate-600">Choose a mode and get one challenge from the GeeksforGeeks SDE Sheet.</p>
+
+        <form method="post" class="mt-8 space-y-5">
+            <div>
+                <label for="choice" class="block text-sm font-medium text-slate-700">Selection mode</label>
+                <select id="choice" name="choice" required class="mt-2 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200">
+                    <option value="" {% if not choice %}selected{% endif %}>Choose an option</option>
+                    <option value="random" {% if choice == "random" %}selected{% endif %}>Random Problem</option>
+                    <option value="difficulty" {% if choice == "difficulty" %}selected{% endif %}>Problem by Difficulty</option>
+                </select>
+            </div>
+
+            {% if choice == "difficulty" %}
+            <div>
+                <label for="difficulty" class="block text-sm font-medium text-slate-700">Difficulty</label>
+                <select id="difficulty" name="difficulty" required class="mt-2 w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200">
+                    <option value="" {% if not difficulty %}selected{% endif %}>Choose a difficulty</option>
+                    {% for level in difficulties %}
+                    <option value="{{ level }}" {% if difficulty == level %}selected{% endif %}>{{ level }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            {% endif %}
+
+            <button type="submit" class="w-full rounded-lg bg-indigo-600 px-4 py-2.5 font-semibold text-white transition hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300">Find problem</button>
+        </form>
+
+        {% if problem %}
+        <section class="mt-8 rounded-xl border border-slate-200 bg-slate-50 p-5" aria-live="polite">
+            <p class="text-sm font-medium text-slate-500">{{ problem["difficulty"] }}</p>
+            <h2 class="mt-1 text-xl font-bold">{{ problem["title"] }}</h2>
+            <a href="{{ problem["url"] }}" target="_blank" rel="noopener noreferrer" class="mt-4 inline-block font-semibold text-indigo-600 hover:text-indigo-800">Open problem &rarr;</a>
+        </section>
+        {% elif message %}
+        <p class="mt-8 rounded-lg bg-amber-50 p-4 text-sm text-amber-800" role="alert">{{ message }}</p>
+        {% endif %}
+    </main>
+</body>
+</html>
