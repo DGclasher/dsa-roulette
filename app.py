@@ -1,3 +1,4 @@
+import time
 import requests
 from flask import Flask, render_template, request
 
@@ -8,10 +9,19 @@ app = Flask(__name__)
 SDE_SHEET_URL = "https://www.geeksforgeeks.org/dsa/sde-sheet-a-complete-guide-for-sde-preparation/"
 DIFFICULTIES = ("Easy", "Medium", "Hard")
 
+cached_problems = None
+cache_duration = 60 * 60 * 24
 
 def load_problems():
+    global cached_problems, cache_duration
+    now = time.time()
+
+    if cached_problems is not None and (now - cached_problems[0]) < cache_duration:
+        return cached_problems[1]
+
     response = requests.get(SDE_SHEET_URL, timeout=15)
     response.raise_for_status()
+    cached_problems = (now, parse_html(response.text)[1])
     return parse_html(response.text)[1]
 
 
